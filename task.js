@@ -478,61 +478,177 @@ const prompt = require("prompt-sync")();
 
 // Task 17
 
-let nums1 = [];
+// let nums1 = [];
 
-const size = parseInt(prompt("Enter the size: "));
+// const size = parseInt(prompt("Enter the size: "));
 
-for(let i = 0 ; i < size;i++){
-  nums1[i] = Number(prompt("Enter the number: "));
-}
+// for(let i = 0 ; i < size;i++){
+//   nums1[i] = Number(prompt("Enter the number: "));
+// }
 
-let nums2 = [];
+// let nums2 = [];
 
-const size2 = parseInt(prompt("Enter the size: "));
+// const size2 = parseInt(prompt("Enter the size: "));
 
-for(let i = 0 ; i < size2;i++){
-  nums2[i] = Number(prompt("Enter the number: "));
-}
+// for(let i = 0 ; i < size2;i++){
+//   nums2[i] = Number(prompt("Enter the number: "));
+// }
 
 
 
-function mergeArrays(nums1, nums2) {
-  var m      = nums1.length;
-  var n      = nums2.length;
-  var total  = m + n;
-  var merged = [];
-  var i = 0, j = 0, k = 0;
+// function mergeArrays(nums1, nums2) {
+//   var m      = nums1.length;
+//   var n      = nums2.length;
+//   var total  = m + n;
+//   var merged = [];
+//   var i = 0, j = 0, k = 0;
 
-  while (k < total) {
-    if (i < m && (j >= n || nums1[i] <= nums2[j])) {
-      merged[k] = nums1[i];
-      i++;
-    } else {
-      merged[k] = nums2[j];
-      j++;
+//   while (k < total) {
+//     if (i < m && (j >= n || nums1[i] <= nums2[j])) {
+//       merged[k] = nums1[i];
+//       i++;
+//     } else {
+//       merged[k] = nums2[j];
+//       j++;
+//     }
+//     k++;
+//   }
+
+//   return merged;
+// }
+
+
+// function task17(nums1, nums2) {
+//   var merged = mergeArrays(nums1, nums2);
+//   var total  = merged.length;
+
+//   var mid    = (total - total % 2) / 2; 
+
+//   if (total % 2 === 1) {
+//     return merged[mid];
+//   } else {
+//     return (merged[mid - 1] + merged[mid]) / 2;
+//   }
+// }
+
+// console.log(mergeArrays(nums1,nums2));
+// console.log(task17(nums1,nums2));
+
+// Task 17
+
+
+function evaluate(expression) {
+    let index = 0;
+
+    function parseExpression() {
+        let value = parseTerm();
+
+        while (true) {
+            skipSpaces();
+
+            if (index >= expression.length) break;
+
+            const op = expression[index];
+
+            if (op !== '+' && op !== '-') break;
+
+            index++;
+
+            const right = parseTerm();
+
+            if (op === '+') {
+                value += right;
+            } else {
+                value -= right;
+            }
+        }
+
+        return value;
     }
-    k++;
-  }
 
-  return merged;
+    function parseTerm() {
+        let value = parseFactor();
+
+        while (true) {
+            skipSpaces();
+
+            if (index >= expression.length) break;
+
+            const op = expression[index];
+
+            if (op !== '*' && op !== '/') break;
+
+            index++;
+
+            const right = parseFactor();
+
+            if (op === '*') {
+                value *= right;
+            } else {
+                value /= right;
+            }
+        }
+
+        return value;
+    }
+
+    function parseFactor() {
+        skipSpaces();
+
+        if (expression[index] === '(') {
+            index++; // skip '('
+
+            const value = parseExpression();
+
+            skipSpaces();
+
+            if (expression[index] === ')') {
+                index++; // skip ')'
+            }
+
+            return value;
+        }
+
+        return parseNumber();
+    }
+
+    function parseNumber() {
+        skipSpaces();
+
+        let num = 0;
+        let hasDigits = false;
+
+        while (
+            index < expression.length &&
+            expression[index] >= '0' &&
+            expression[index] <= '9'
+        ) {
+            num = num * 10 + (expression[index].charCodeAt(0) - 48);
+            index++;
+            hasDigits = true;
+        }
+
+        if (!hasDigits) {
+            throw new Error("Invalid number");
+        }
+
+        return num;
+    }
+
+    function skipSpaces() {
+        while (
+            index < expression.length &&
+            expression[index] === ' '
+        ) {
+            index++;
+        }
+    }
+
+    return parseExpression();
 }
 
-
-function task17(nums1, nums2) {
-  var merged = mergeArrays(nums1, nums2);
-  var total  = merged.length;
-
-  var mid    = (total - total % 2) / 2; 
-
-  if (total % 2 === 1) {
-    return merged[mid];
-  } else {
-    return (merged[mid - 1] + merged[mid]) / 2;
-  }
-}
-
-console.log(mergeArrays(nums1,nums2));
-console.log(task17(nums1,nums2));
-
-
+console.log(evaluate("2 + 3 * (4 - 1)"));      
+console.log(evaluate("(2 + 3) * 4"));          
+console.log(evaluate("10 + 6 / 2"));           
+console.log(evaluate("8 * (2 + (3 * 2))"));   
 
