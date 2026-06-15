@@ -476,3 +476,63 @@ const prompt = require("prompt-sync")();
 
 // task16();
 
+// Task 17
+
+let nums1 = [];
+
+const size = parseInt(prompt("Enter the size: "));
+
+for(let i = 0 ; i < size;i++){
+  nums1[i] = Number(prompt("Enter the number: "));
+}
+
+let nums2 = [];
+
+const size2 = parseInt(prompt("Enter the size: "));
+
+for(let i = 0 ; i < size2;i++){
+  nums2[i] = Number(prompt("Enter the number: "));
+}
+
+
+
+function mergeArrays(nums1, nums2) {
+  var m      = nums1.length;
+  var n      = nums2.length;
+  var total  = m + n;
+  var merged = [];
+  var i = 0, j = 0, k = 0;
+
+  while (k < total) {
+    if (i < m && (j >= n || nums1[i] <= nums2[j])) {
+      merged[k] = nums1[i];
+      i++;
+    } else {
+      merged[k] = nums2[j];
+      j++;
+    }
+    k++;
+  }
+
+  return merged;
+}
+
+
+function task17(nums1, nums2) {
+  var merged = mergeArrays(nums1, nums2);
+  var total  = merged.length;
+
+  var mid    = (total - total % 2) / 2; 
+
+  if (total % 2 === 1) {
+    return merged[mid];
+  } else {
+    return (merged[mid - 1] + merged[mid]) / 2;
+  }
+}
+
+console.log(mergeArrays(nums1,nums2));
+console.log(task17(nums1,nums2));
+
+
+
